@@ -9,7 +9,7 @@ mercurial==5.9.3
 mock==4.0.3
 monotonic==1.6
 mysql-connector-python==8.0.27
-mysql-utilities==1.7.1
+mysql-utilities==1.6.4
 networkx==2.6.3
 nltk==3.6.5
 numpy==1.21.5

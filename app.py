@@ -6,7 +6,6 @@ import os
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def root():
     if not session.get('logged_in'):
@@ -14,26 +13,22 @@ def root():
     else:
         return render_template('index.html')
 
-
 @app.route('/login', methods=['POST'])
 def do_admin_login():
     if request.form['password'] == 'admin' and request.form['username'] == 'admin':
         session['logged_in'] = True
     else:
         flash('wrong password!')
-    return root()
-
+    return redirect('/')
 
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
-    return root()
-
+    return redirect('/')
 
 @app.route("/sentiment")
 def sentiment():
     return render_template("sentiment.html")
-
 
 @app.route("/predictSentiment", methods=["POST"])
 def predictSentiment():
@@ -41,7 +36,6 @@ def predictSentiment():
     pm = process_message(message)
     result = DepressionDetection.classify(pm, 'bow') or DepressionDetection.classify(pm, 'tf-idf')
     return render_template("tweetresult.html", result=result)
-
 
 @app.route('/predict', methods=["POST"])
 def predict():
@@ -72,10 +66,11 @@ def predict():
         result = 'Your Depression test result : Severe Depression'
     return render_template("result.html", result=result)
 
-
 @app.route('/health')
 def health():
     return 'Server is up and running!'
 
-
 app.secret_key = os.urandom(12)
+
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template,flash,redirect,session,abort,jsonify
+from flask import Flask, request, render_template, flash, redirect, session, abort, jsonify
 from models import Model
 from depression_detection_tweets import DepressionDetection
 from TweetModel import process_message
@@ -19,9 +19,10 @@ def root():
 def do_admin_login():
     if request.form['password'] == 'admin' and request.form['username'] == 'admin':
         session['logged_in'] = True
-    else :
+    else:
         flash('wrong password!')
     return root()
+
 
 @app.route("/logout")
 def logout():
@@ -39,7 +40,7 @@ def predictSentiment():
     message = request.form['form10']
     pm = process_message(message)
     result = DepressionDetection.classify(pm, 'bow') or DepressionDetection.classify(pm, 'tf-idf')
-    return render_template("tweetresult.html",result=result)
+    return render_template("tweetresult.html", result=result)
 
 
 @app.route('/predict', methods=["POST"])
@@ -60,17 +61,21 @@ def predict():
     classifier = model.svm_classifier()
     prediction = classifier.predict([values])
     if prediction[0] == 0:
-            result = 'Your Depression test result : No Depression'
+        result = 'Your Depression test result : No Depression'
     if prediction[0] == 1:
-            result = 'Your Depression test result : Mild Depression'
+        result = 'Your Depression test result : Mild Depression'
     if prediction[0] == 2:
-            result = 'Your Depression test result : Moderate Depression'
+        result = 'Your Depression test result : Moderate Depression'
     if prediction[0] == 3:
-            result = 'Your Depression test result : Moderately severe Depression'
+        result = 'Your Depression test result : Moderately severe Depression'
     if prediction[0] == 4:
-            result = 'Your Depression test result : Severe Depression'
+        result = 'Your Depression test result : Severe Depression'
     return render_template("result.html", result=result)
 
+
+@app.route('/health')
+def health():
+    return 'Server is up and running!'
+
+
 app.secret_key = os.urandom(12)
-if __name__=='__main__':
-    app.run(port=5987, host='0.0.0.0', debug=True)

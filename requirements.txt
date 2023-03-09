@@ -84,7 +84,6 @@ google-pasta==0.2.0
 grpcio==1.32.0
 h5py==3.1.0
 idna==2.10
-wrapt==1.11.2
 importlib-metadata==4.0.1
 importlib-resources==5.2.0
 ipaddress==1.0.23
